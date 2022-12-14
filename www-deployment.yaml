@@ -27,7 +27,7 @@ spec:
       containers:
         - name: webapp-ssh
           image: >-
-            quay.io/markhooper27/webapp/webapp-www
+            quay.io/markhooper27/webapp/webapp-www:v1.0
           securityContext:
             privileged: true
           ports:
