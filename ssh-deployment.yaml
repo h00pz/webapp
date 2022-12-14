@@ -27,7 +27,7 @@ spec:
       containers:
         - name: webapp-ssh
           image: >-
-            image-registry.openshift-image-registry.svc:5000/demo-app/webapp-ssh@sha256:99677a6c300a4042edc963a0bd9f873c4d1d8cc5c56f4729822300841aea3611
+            quay.io/markhooper27/webapp/webapp-ssh
           securityContext:
             privileged: true
           ports:
