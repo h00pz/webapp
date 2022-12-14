@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp-ssh
+  namespace: filezilla
+  labels:
+    app: webapp-ssh
+spec:
+  selector:
+    app: ssh-php
+  ports:
+    - name: tcp-2020
+      protocol: TCP
+      port: 2020
+      targetPort: 2020
+  type: LoadBalancer
+  selector:
+    app: webapp-ssh
+    deployment: webapp-ssh

@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: webapp-www
+  namespace: demo-app
+  labels:
+    app: webapp-www
+    app.kubernetes.io/component: webapp-www
+    app.kubernetes.io/instance: webapp-www
+    app.kubernetes.io/name: webapp-www
+    app.kubernetes.io/part-of: webapp-www
+    app.openshift.io/runtime: apache
+    app.openshift.io/runtime-namespace: demo-app
+    app.openshift.io/runtime-version: v1.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-www
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp-www
+        deployment: webapp-www
+    spec:
+      containers:
+        - name: webapp-ssh
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/demo-app/webapp-www:v1.0
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: www
+              mountPath: /var/www/app/public_html/files
+      restartPolicy: Always
+      serviceAccountName: webapp-sa
+      serviceAccount: webapp-sa
+      volumes:
+      - name: www
+        persistentVolumeClaim:
+          claimName: pvc-webapp

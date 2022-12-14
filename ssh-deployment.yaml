@@ -1,0 +1,56 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: webapp-ssh
+  namespace: demo-app
+  labels:
+    app: webapp-ssh
+    app.kubernetes.io/component: webapp-ssh
+    app.kubernetes.io/instance: webapp-ssh
+    app.kubernetes.io/name: webapp-ssh
+    app.kubernetes.io/part-of: webapp-ssh
+    app.openshift.io/runtime: other-linux
+    app.openshift.io/runtime-namespace: demo-app
+    app.openshift.io/runtime-version: v1.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-ssh
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp-ssh
+        deployment: webapp-ssh
+    spec:
+      containers:
+        - name: webapp-ssh
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/demo-app/webapp-ssh@sha256:99677a6c300a4042edc963a0bd9f873c4d1d8cc5c56f4729822300841aea3611
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 2020
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SSH_AUTHORIZED_KEYS
+              value: >-
+                ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3j+Zh34pPxL4gJIq30sKtT5ISfViOn+wTwvf7EzGGVO/q5zWPq5hlabDOtLcutZ09iCFaF8C8JGx7yVtG1bqNTxJr3XpArpJVeAzpASq0bf81QmBBk0IDih8RD64jhyv87HguWtzzqs3DOIMeqGmypUkldTVYsLLLHwoDLX8YItN0+etgumN+K2rYIchcD1JaYqNdW44ZVEB1Sc9C3amhybTsdejnNbesM+QLSpt2CTh/VM4+Uffal1EX/Z9M50FJrdojPbUxH0hMUr2ggDKqmLtJfqivKWcLENd12Sf2AkNgrbAnweEsmtcHuAYWNYbnXkvCQbAC17PG6OkSPUSTNRhPUkfuOWR+oQmWIEuwN5xQ72a4+WXfYWcpgdZq9Wo1nFu1SEyR9liKkZ+ibF8L1ahJDk4dNkzyvevYYBjdi/NlDzdZAIYrjI7jkspV1gmhsTtpYMw0mDSXQR9XRk0im1EC9xxYgZ/WjJH2ztr/P8uN6oKXpHU7ZfkVxdOnK+65TaD65jKN2NJHIvs7XcvOdMjBNGn1JxQ5cbEAKka0lgRaa3qwYyEH0uWhE60lopxapJEZQt7GTGnCwEvQDy/9Ximn4OVdz89v/lelxmeMAxODc7Pe81HgwF5CvkEBfAOl6GWkc/nYnTc5Rc/Fi0CmY/cBv7D5WTuMLaYiU07Zmw== h00pz@silver-surfer
+            - name: ENABLE_SSHD_BOOTSTRAP
+              value: 'true'
+            - name: ENABLE_SSHD_WRAPPER
+              value: 'true'
+            - name: SSH_USER_HOME
+              value: /home/centos
+          volumeMounts:
+            - name: www
+              mountPath: /home/centos/www
+      restartPolicy: Always
+      serviceAccountName: webapp-sa
+      serviceAccount: webapp-sa
+      volumes:
+      - name: www
+        persistentVolumeClaim:
+          claimName: pvc-webapp

@@ -1,0 +1,23 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp-www
+  namespace: demo-app
+  labels:
+    app: webapp-www
+    app.kubernetes.io/component: webapp-www
+    app.kubernetes.io/instance: webapp-www
+    app.kubernetes.io/name: webapp-www
+    app.kubernetes.io/part-of: webapp-www
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: webapp-www
+    deployment: webapp-www
