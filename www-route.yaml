@@ -18,3 +18,25 @@ spec:
   port:
     targetPort: 8080-tcp
   wildcardPolicy: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: webapp-8443
+  namespace: demo-app
+  labels:
+    app: webapp-www
+    app.kubernetes.io/component: webapp-www
+    app.kubernetes.io/instance: webapp-www
+    app.kubernetes.io/name: webapp-www
+    app.kubernetes.io/part-of: webapp-www
+spec:
+  host: webapp2.apps.c2.h00pz.co
+  to:
+    kind: Service
+    name: webapp-www
+    weight: 100
+  port:
+    targetPort: 8443-tcp
+  wildcardPolicy: None
+
